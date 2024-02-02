@@ -1,0 +1,27 @@
+npm install -g prisma
+
+npm init -y
+npm install @prisma/client mysql
+
+
+DATABASE_URL="mysql://<USERNAME>:<PASSWORD>@<CLUSTER_NAME>-<USERNAME>.db.planetscale.io:3306/<DATABASE_NAME>"
+
+npx prisma init
+
+// prisma/schema.prisma
+
+model Produto {
+  id                Int      @id @default(autoincrement())
+  descricao         String
+  codigo_barras     String
+  quantidade_estoque Int
+  tipo_preco        String
+  imagem            String
+}
+
+
+npx prisma generate
+npx prisma db push
+
+node index.js
+

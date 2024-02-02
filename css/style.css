@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.sidebar {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: #111;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    color: white;
+}
+
+.sidebar button {
+    background-color: transparent;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.sidebar h2 {
+    padding: 10px;
+}
+
+#openSidebarBtn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+#closeSidebarBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

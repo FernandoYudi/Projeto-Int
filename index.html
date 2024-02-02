@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto-Int</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> 
+    <script>
+        function rCheckout() {
+            const totalValueElement = document.getElementById('totalValue');
+            const totalValueText = totalValueElement.innerText;
+            const totalValueMatch = totalValueText.match(/R\$\s([\d,]+)/);
+            const totalValue = totalValueMatch ? parseFloat(totalValueMatch[1].replace(',', '.')) : 0.0;
+
+            const checkoutItemsElement = document.getElementById('checkoutItems');
+            const items = [];
+            const rows = checkoutItemsElement.getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells.length === 4) {
+                    const description = cells[0].innerText;
+                    const quantity = cells[1].innerText;
+                    const price = cells[2].innerText;
+                    const barcode = cells[3].innerText;
+                    items.push({ description, quantity, price, barcode });
+                }
+            }
+
+            const boletoContent = `
+                <div>
+                    <h2>Boleto Fantasia</h2>
+                    <p>Valor: R$ ${totalValue.toFixed(2)}</p>
+                    <p>Vencimento: 10/02/2024</p>
+                    <h3>Itens:</h3>
+                    <ul>
+                        ${items.map(item => `<li>${item.description} - Quantidade: ${item.quantity}, Preço: ${item.price}, Código de Barras: ${item.barcode}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            const novaAba = window.open('', '_blank');
+            novaAba.document.write(boletoContent);
+            novaAba.document.close();
+        }
+    </script>
+
+</head>
+<body>
+    <div class="bg-info">
+        <nav class="navbar navbar-expand-lg bg-primary text-white">
+            <div class="container-fluid">
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <a class="navbar-brand text-white p-2" href="#">Projeto-Int</a>
+              <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/">Home</a>
+                      </li>
+                  <li class="nav-item">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                        </button>
+                        <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                        </ul>
+                    </div>
+                    <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
+                  </li>           
+                <form class="d-flex" role="search">
+                    <input id="searchInput" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button id="searchButton" class="btn btn-outline-light" type="button">Search</button>
+                  </form>
+                  
+              </div>
+            </div>
+          </nav>
+    </div>
+    
+    <div class="container mt-5">
+        <h1 class="text-center mb-1"></h1>
+        <!-- Lista de Produtos -->
+        <div id="productList" class="row"></div>
+        <p class="d-inline-flex gap-1">
+            <button class="btn btn-success" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30.625 7.29167L27.7083 17.5H10.7577M29.1667 23.3333H11.6667L8.75 4.375H4.375M23.3333 8.02083H19.6875M19.6875 8.02083H16.0417M19.6875 8.02083V11.6667M19.6875 8.02083V4.375M13.125 29.1667C13.125 29.9721 12.4721 30.625 11.6667 30.625C10.8613 30.625 10.2083 29.9721 10.2083 29.1667C10.2083 28.3612 10.8613 27.7083 11.6667 27.7083C12.4721 27.7083 13.125 28.3612 13.125 29.1667ZM29.1667 29.1667C29.1667 29.9721 28.5138 30.625 27.7083 30.625C26.9029 30.625 26.25 29.9721 26.25 29.1667C26.25 28.3612 26.9029 27.7083 27.7083 27.7083C28.5138 27.7083 29.1667 28.3612 29.1667 29.1667Z" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    
+            </button>
+          </p>
+          <div class="collapse" id="collapseExample">
+            <div id="alertContainer "></div>
+                <div class="card card-body">
+                    <h5>Itens no Carrinho</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Quantidade</th>
+                                <th>Preço</th>
+                                <th>Código de Barras</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checkoutItems">
+                        </tbody>
+                    </table>
+                    <p id="totalValue">Valor Total: R$ 0,00</p>
+                    <button type="button" class="btn btn-success" onclick="rCheckout()">Checkout</button>
+                </div>
+        </div>
+
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+      <script src="/app/api/main.js"></script>
+      <script src="./dist/bundle.js"></script>
+    </body>
+</html>
+
+      
+
+      
+
+
+
+
+      
+
+      
+
+

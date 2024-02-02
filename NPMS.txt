@@ -1,0 +1,9 @@
+npm install bootstrap@5 jquery webpack webpack-cli webpack-dev-server css-loader style-loader html-webpack-plugin --save-dev
+
+npm install tapable@2.2.0
+npm install mysql
+
+
+Chocolatey v2.2.2
+
+Node 21.6.1
