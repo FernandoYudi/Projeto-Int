@@ -35,10 +35,12 @@ const produtos = [
 
 // Exibir os produtos
 function displayProducts(products) {
-  console.log(products);
   const productListElement = $('#productList');
   productListElement.empty();
 
+  if (products.length === 0) {
+    productListElement.append('<li>No results found</li>');
+  } else {
   products.forEach(product => {
     const productCard = `
       <div class="col-md-3 product-card" data-codigo="${product.codigo_barras}">
@@ -55,7 +57,6 @@ function displayProducts(products) {
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
-
             </select>
             <button type="button" class="btn btn-primary mt-2" id="adicionarAoCheckoutBtn${product.codigo_barras}">
               Adicionar ao Checkout
@@ -67,7 +68,17 @@ function displayProducts(products) {
 
     productListElement.append(productCard);
   });
+ }
 }
+
+
+    //Busca
+    function searchProducts(query) {
+      const filteredProducts = produtos.filter(product => 
+        product.descricao.toLowerCase().includes(query.toLowerCase())
+      );
+      return filteredProducts;
+    }
 
 /////////////////////////////////////////////////////
 
@@ -139,13 +150,15 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 });
 
-/////////////////////////////////////////////
+////////////////////////////////////////////
+
+    $('#searchButton').click(function() {
+      const searchTerm = $('#searchInput').val();
+      const searchResults = searchProducts(searchTerm);
+      displayProducts(searchResults);
+    });
+    
 
 // Exibir os produtos
 displayProducts(produtos);
 
-// Botão de pesquisa
-$('#searchButton').on('click', function() {
-  const searchTerm = $('#searchInput').val();
-  searchProducts(searchTerm, produtos);
-});
